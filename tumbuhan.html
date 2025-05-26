@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioPlantz - Portal Biologi Tumbuhan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .plant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .plant-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .plant-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .plant-info {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .preview-frame {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            width: 100%;
+            height: 300px;
+            background: white;
+        }
+
+        .photosynthesis-demo {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .equation {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+
+        .process-step {
+            background: rgba(255, 255, 255, 0.8);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .nav-tabs {
+                justify-content: center;
+            }
+            
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.9em;
+            }
+            
+            .plant-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌿 BioPlantz</h1>
+            <p class="subtitle">Portal Pembelajaran Biologi Tumbuhan Interaktif</p>
+        </header>
+
+        <!-- Hanya tampilkan Beranda di awal -->
+        <div id="home" class="tab-content active">
+            <div style="text-align:center;">
+                <h2 style="color:#667eea; margin-bottom:10px;">Selamat Datang di <b>BioPlantz</b>!</h2>
+                <p style="font-size:1.2em; margin-bottom:20px;">
+                    Website interaktif untuk belajar biologi tumbuhan.<br>
+                    Temukan info, galeri, simulasi, dan fakta unik seputar dunia tumbuhan!
+                </p>
+                <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap; margin:30px 0;">
+                    <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80" alt="Tumbuhan" style="border-radius:20px; max-width:320px; box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+                    <div style="display:flex; flex-direction:column; justify-content:center; gap:15px;">
+                        <button class="btn" onclick="showTab('info')">📚 Info Tumbuhan</button>
+                        <button class="btn" onclick="showTab('photosynthesis')">🌱 Proses Fotosintesis</button>
+                        <button class="btn" onclick="showTab('gallery')">🌼 Galeri & Animasi</button>
+                        <button class="btn" onclick="showTab('plant-fact')">🌟 Fakta Unik</button>
+                        <button class="btn" onclick="showTab('virtual-plant')">🪴 Simulasi Tanam</button>
+                        <button class="btn" onclick="showTab('about')">👥 Tentang Kami</button>
+                    </div>
+                </div>
+                <div style="margin-top:30px; background:rgba(255,255,255,0.8); border-radius:15px; padding:18px 24px; display:inline-block;">
+                    <b>Tips:</b> Klik tombol di samping gambar untuk mulai belajar!
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab lain tetap ada di HTML, tapi disembunyikan saat pertama kali load -->
+        <div id="info" class="tab-content">
+            <button class="btn" style="margin-bottom:20px;" onclick="showTab('home')">⬅️ Kembali ke Beranda</button>
+            <button class="btn" onclick="showTab('photosynthesis')">🌱 Fotosintesis</button>
+            <button class="btn" onclick="showTab('gallery')">🌼 Galeri</button>
+            <button class="btn" onclick="showTab('plant-fact')">🌟 Fakta Unik</button>
+            <button class="btn" onclick="showTab('virtual-plant')">🪴 Simulasi Tanam</button>
+            <button class="btn" onclick="showTab('about')">👥 Tentang Kami</button>
+            <h2>🌿 Informasi Biologi Tumbuhan</h2>
+            <p>Pelajari berbagai jenis tumbuhan dan karakteristik biologisnya yang menakjubkan.</p>
+            <div class="plant-grid">
+                <div class="plant-card">
+                    <h3>🌹 Tumbuhan Berbunga (Angiospermae)</h3>
+                    <p>Kelompok tumbuhan terbesar dengan lebih dari 300.000 spesies di seluruh dunia.</p>
+                    <div class="plant-info">
+                        <strong>Ciri-ciri:</strong><br>
+                        • Memiliki bunga sejati<br>
+                        • Biji terlindung dalam buah<br>
+                        • Daun dengan tulang daun bervariasi<br>
+                        • Reproduksi melalui penyerbukan
+                    </div>
+                </div>
+                <div class="plant-card">
+                    <h3>🌲 Tumbuhan Berbiji Terbuka (Gymnospermae)</h3>
+                    <p>Tumbuhan dengan biji yang tidak terlindung oleh dinding buah.</p>
+                    <div class="plant-info">
+                        <strong>Ciri-ciri:</strong><br>
+                        • Biji terbuka (tidak dalam buah)<br>
+                        • Umumnya berupa pohon atau semak<br>
+                        • Daun berbentuk jarum atau sisik<br>
+                        • Reproduksi melalui strobilus/kerucut
+                    </div>
+                </div>
+                <div class="plant-card">
+                    <h3>🌿 Tumbuhan Paku (Pteridophyta)</h3>
+                    <p>Tumbuhan vaskular yang berkembangbiak dengan spora.</p>
+                    <div class="plant-info">
+                        <strong>Ciri-ciri:</strong><br>
+                        • Tidak berbunga dan berbiji<br>
+                        • Reproduksi dengan spora<br>
+                        • Memiliki sistem vaskular<br>
+                        • Alternasi generasi jelas
+                    </div>
+                </div>
+                <div class="plant-card">
+                    <h3>🍄 Tumbuhan Lumut (Bryophyta)</h3>
+                    <p>Tumbuhan kecil tanpa sistem vaskular yang hidup di tempat lembap.</p>
+                    <div class="plant-info">
+                        <strong>Ciri-ciri:</strong><br>
+                        • Tidak memiliki akar, batang, daun sejati<br>
+                        • Reproduksi dengan spora<br>
+                        • Membutuhkan air untuk reproduksi<br>
+                        • Gametofit dominan
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="photosynthesis" class="tab-content">
+            <button class="btn" style="margin-bottom:20px;" onclick="showTab('home')">⬅️ Kembali ke Beranda</button>
+            <button class="btn" onclick="showTab('info')">📚 Info Tumbuhan</button>
+            <button class="btn" onclick="showTab('gallery')">🌼 Galeri</button>
+            <button class="btn" onclick="showTab('plant-fact')">🌟 Fakta Unik</button>
+            <button class="btn" onclick="showTab('virtual-plant')">🪴 Simulasi Tanam</button>
+            <button class="btn" onclick="showTab('about')">👥 Tentang Kami</button>
+            <div class="photosynthesis-demo">
+                <h2>🌱 Proses Fotosintesis</h2>
+                <p>Proses fundamental yang mengubah energi cahaya menjadi energi kimia</p>
+                <div class="equation">
+                    6CO₂ + 6H₂O + Energi Cahaya → C₆H₁₂O₆ + 6O₂
+                </div>
+                <h3>Tahapan Fotosintesis:</h3>
+                <div class="process-step">
+                    <strong>1. Reaksi Terang (Light Reaction)</strong><br>
+                    Terjadi di tilakoid, mengubah energi cahaya menjadi ATP dan NADPH
+                </div>
+                <div class="process-step">
+                    <strong>2. Siklus Calvin (Dark Reaction)</strong><br>
+                    Terjadi di stroma, menggunakan ATP dan NADPH untuk membentuk glukosa
+                </div>
+                <div class="process-step">
+                    <strong>3. Fiksasi Karbon</strong><br>
+                    CO₂ dari udara diikat dan diubah menjadi senyawa organik
+                </div>
+                <button class="btn" onclick="animatePhotosynthesis()">🎬 Animasi Fotosintesis</button>
+                <div id="animation-result" style="margin-top: 20px; min-height: 50px; background: rgba(255,255,255,0.8); border-radius: 10px; padding: 20px;"></div>
+            </div>
+        </div>
+
+        <div id="gallery" class="tab-content">
+            <button class="btn" style="margin-bottom:20px;" onclick="showTab('home')">⬅️ Kembali ke Beranda</button>
+            <button class="btn" onclick="showTab('info')">📚 Info Tumbuhan</button>
+            <button class="btn" onclick="showTab('photosynthesis')">🌱 Fotosintesis</button>
+            <button class="btn" onclick="showTab('plant-fact')">🌟 Fakta Unik</button>
+            <button class="btn" onclick="showTab('virtual-plant')">🪴 Simulasi Tanam</button>
+            <button class="btn" onclick="showTab('about')">👥 Tentang Kami</button>
+            <h2>🌼 Galeri Tumbuhan</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=200&q=80" alt="Mawar" style="width:120px; border-radius:10px;">
+                    <p style="text-align:center;">Mawar</p>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=200&q=80" alt="Anggrek" style="width:120px; border-radius:10px;">
+                    <p style="text-align:center;">Anggrek</p>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=200&q=80" alt="Kaktus" style="width:120px; border-radius:10px;">
+                    <p style="text-align:center;">Kaktus</p>
+                </div>
+            </div>
+            <hr style="margin:30px 0;">
+            <h3 style="text-align:center;">🌱 Animasi Pertumbuhan Tanaman</h3>
+            <div id="plant-stage" style="font-size: 3em; text-align: center; margin: 30px 0;">🌱</div>
+            <div id="plant-stage-text" style="text-align:center; font-size:1.2em; margin-bottom:20px;">Benih mulai tumbuh...</div>
+            <button class="btn" onclick="animateGrowth()">Mulai Animasi</button>
+        </div>
+
+        <div id="plant-fact" class="tab-content">
+            <button class="btn" style="margin-bottom:20px;" onclick="showTab('home')">⬅️ Kembali ke Beranda</button>
+            <button class="btn" onclick="showTab('info')">📚 Info Tumbuhan</button>
+            <button class="btn" onclick="showTab('photosynthesis')">🌱 Fotosintesis</button>
+            <button class="btn" onclick="showTab('gallery')">🌼 Galeri</button>
+            <button class="btn" onclick="showTab('virtual-plant')">🪴 Simulasi Tanam</button>
+            <button class="btn" onclick="showTab('about')">👥 Tentang Kami</button>
+            <h2>🌟 Fakta Unik Tumbuhan</h2>
+            <div id="fact-box" style="background:#f8f9fa; border-radius:10px; padding:20px; margin:20px 0; font-size:1.1em;"></div>
+            <button class="btn" onclick="showRandomFact()">Fakta Lainnya</button>
+        </div>
+
+        <div id="virtual-plant" class="tab-content">
+            <button class="btn" style="margin-bottom:20px;" onclick="showTab('home')">⬅️ Kembali ke Beranda</button>
+            <button class="btn" onclick="showTab('info')">📚 Info Tumbuhan</button>
+            <button class="btn" onclick="showTab('photosynthesis')">🌱 Fotosintesis</button>
+            <button class="btn" onclick="showTab('gallery')">🌼 Galeri</button>
+            <button class="btn" onclick="showTab('plant-fact')">🌟 Fakta Unik</button>
+            <button class="btn" onclick="showTab('about')">👥 Tentang Kami</button>
+            <h2>🪴 Simulasi Menanam Tumbuhan</h2>
+            <label>Pilih Jenis Tanaman:
+                <select id="plantType">
+                    <option value="Mawar">Mawar</option>
+                    <option value="Kaktus">Kaktus</option>
+                    <option value="Anggrek">Anggrek</option>
+                </select>
+            </label>
+            <br><br>
+            <label>Pilih Media Tanam:
+                <select id="mediaType">
+                    <option value="Tanah">Tanah</option>
+                    <option value="Pasir">Pasir</option>
+                    <option value="Hydrogel">Hydrogel</option>
+                </select>
+            </label>
+            <br><br>
+            <label>Pilih Intensitas Cahaya:
+                <select id="lightType">
+                    <option value="Tinggi">Tinggi</option>
+                    <option value="Sedang">Sedang</option>
+                    <option value="Rendah">Rendah</option>
+                </select>
+            </label>
+            <br><br>
+            <button class="btn" onclick="simulatePlant()">Simulasikan</button>
+            <div id="sim-result" style="margin-top:20px; font-weight:bold;"></div>
+        </div>
+
+        <!-- About Us -->
+        <div id="about" class="tab-content">
+            <button class="btn" style="margin-bottom:20px;" onclick="showTab('home')">⬅️ Kembali ke Beranda</button>
+            <button class="btn" onclick="showTab('info')">📚 Info Tumbuhan</button>
+            <button class="btn" onclick="showTab('photosynthesis')">🌱 Fotosintesis</button>
+            <button class="btn" onclick="showTab('gallery')">🌼 Galeri</button>
+            <button class="btn" onclick="showTab('plant-fact')">🌟 Fakta Unik</button>
+            <button class="btn" onclick="showTab('virtual-plant')">🪴 Simulasi Tanam</button>
+            <h2 style="text-align:center;">👥 About Us</h2>
+            <p style="text-align:center;">Kelompok 1 - Biologi Tumbuhan</p>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; margin-top:30px;">
+                <div class="plant-card" style="width:220px; align-items:center; text-align:center;">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Nama 1" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:10px;">
+                    <h3 style="margin-bottom:5px;">Nama 1</h3>
+                    <p>Ketua Kelompok</p>
+                </div>
+                <div class="plant-card" style="width:220px; align-items:center; text-align:center;">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Nama 2" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:10px;">
+                    <h3 style="margin-bottom:5px;">Nama 2</h3>
+                    <p>Anggota</p>
+                </div>
+                <div class="plant-card" style="width:220px; align-items:center; text-align:center;">
+                    <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Nama 3" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:10px;">
+                    <h3 style="margin-bottom:5px;">Nama 3</h3>
+                    <p>Anggota</p>
+                </div>
+                <div class="plant-card" style="width:220px; align-items:center; text-align:center;">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Nama 4" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:10px;">
+                    <h3 style="margin-bottom:5px;">Nama 4</h3>
+                    <p>Anggota</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 Plantz - Portal Pembelajaran Biologi Tumbuhan</p>
+            <p>Dibuat dengan 💚 untuk pendidikan</p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        const facts = [
+            "Bambu adalah tumbuhan dengan pertumbuhan tercepat di dunia.",
+            "Rafflesia arnoldii adalah bunga terbesar di dunia.",
+            "Pohon Baobab bisa menyimpan ribuan liter air di batangnya.",
+            "Beberapa tumbuhan karnivora memakan serangga untuk mendapatkan nutrisi.",
+            "Pohon tertua di dunia berumur lebih dari 4.800 tahun.",
+            "Tanaman Venus flytrap dapat menutup daunnya dalam waktu kurang dari satu detik.",
+            "Pohon terbesar di dunia adalah General Sherman, sequoia raksasa di California.",
+            "Ada tumbuhan yang bisa hidup tanpa tanah, misalnya anggrek epifit.",
+            "Kaktus dapat menyimpan air hingga ribuan liter di batangnya.",
+            "Bunga matahari selalu menghadap ke arah matahari (heliotropisme)."
+        ];
+
+        function showRandomFact() {
+            const factBox = document.getElementById('fact-box');
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            factBox.textContent = randomFact;
+        }
+
+        // Tampilkan fakta pertama kali saat halaman dimuat
+        window.onload = function() {
+            if (document.getElementById('fact-box')) showRandomFact();
+        };
+    </script>
+</body>
+</html>
